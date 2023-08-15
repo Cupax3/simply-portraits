@@ -52,20 +52,21 @@ function getSrc(message: ChatMessage): string | null {
 
 Hooks.on("init", registerSettings);
 
-Hooks.on(
-  "preCreateChatMessage",
-  (message: ChatMessage, options: any, render: any, userId: string) => {
-    const src = getSrc(message);
-    if (src)
-      message.updateSource({
-        flags: {
-          'simply-portraits': {
-            src: src
+Hooks.once("ready", () => {
+  Hooks.on(
+    "preCreateChatMessage",
+    (message: ChatMessage, options: any, render: any, userId: string) => {
+      const src = getSrc(message);
+      if (src)
+        message.updateSource({
+          flags: {
+            'simply-portraits': {
+              src: src
+            }
           }
-        }
-      });
-  }
-);
+        });
+    });
+});
 
 Hooks.on(
   "renderChatMessage", (message, html, data) => {
